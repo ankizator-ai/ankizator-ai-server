@@ -7,18 +7,29 @@ import google.generativeai as genai
 from dotenv import dotenv_values
 import typing_extensions as typing
 
-class WordSchema(Schema):
+class ContextSchema(Schema):
     pl: str
     en: str
 
-class ContextSchema(Schema):
-    words: List[WordSchema]
+class WordsPairSchema(Schema):
+    pl: str
+    en: str
+
+class WordsSchema(Schema):
+    words: List[WordsPairSchema]
+
+class WordsPairWithContextSchema(Schema):
+    wordsPair: WordsPairSchema
+    context: ContextSchema
+
+class WordsWithContextSchema(Schema):
+    wordsWithContext: List[WordsPairWithContextSchema]
 
 class ExampleContext(typing.TypedDict):
     pl: str
     en: str
 
-def generate_exa(words: ContextSchema):
+def generate_example_contexts(words: WordsSchema):
     config = dotenv_values(".env")
     genai.configure(api_key=config["GENAI_API_KEY"])
     model = genai.GenerativeModel("gemini-1.5-flash")
@@ -33,3 +44,12 @@ def generate_exa(words: ContextSchema):
 
     first_text_in_response = response.candidates[0].content.parts[0].text
     return json.loads(first_text_in_response)
+
+def add_words_to_examples(words: WordsSchema, context):
+    contexts_with_words = []
+    words = words.dict()["words"]
+    for i, context_without_words in enumerate(context):
+        words_pair = words[i]
+        context_with_words = WordsPairWithContextSchema(wordsPair=words_pair, context=context_without_words)
+        contexts_with_words.append(context_with_words)
+    return contexts_with_words

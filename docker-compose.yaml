@@ -22,8 +22,7 @@ services:
     environment:
       - MONGO_INITDB_DATABASE=ankizator
     volumes:
-      - ./.db_data:/data/scripts
-      - ./scripts:/docker-entrypoint-initdb.d
+      - ./.db_data:/data/db
     networks:
       - app-network
 

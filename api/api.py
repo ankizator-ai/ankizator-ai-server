@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from ninja import NinjaAPI
 
 from api.models import Source
-from config.generate_context import WordsSchema, generate_example_contexts, add_words_to_examples
+from api.generate_context import WordsSchema, generate_example_contexts, add_words_to_examples
 
 api = NinjaAPI()
 

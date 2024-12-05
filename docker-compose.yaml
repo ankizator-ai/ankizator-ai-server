@@ -1,0 +1,32 @@
+services:
+  django-app:
+    profiles:
+      - deploy
+    build: .
+    image: python:3.11-slim-buster
+    environment:
+      - MONGODB_URL=mongodb://mongodb:27017/ankizator
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_DATABASE=ankizator
+    volumes:
+      - ./.db_data:/data/scripts
+      - ./scripts:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

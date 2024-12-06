@@ -1,6 +1,11 @@
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+
+
 from django.http import JsonResponse
 from ninja import NinjaAPI
 
+from api.extration import extract_tablepress_content
 from api.models import Source
 from api.generate_context import WordsSchema, generate_example_contexts, add_words_to_examples
 
@@ -16,3 +21,10 @@ def generate_context(request, payload: WordsSchema):
 def get_sources(request):
     sources = list(Source.objects.values())
     return JsonResponse(sources, safe=False)
+
+@api.get('/sources')
+def get_merula(request):
+    return JsonResponse(extract_tablepress_content(request), safe=False)
+
+# TERMINAL:
+# python api.py https://merula.pl/jezyk-angielski/focus-3-rozdzial-1-wyglad-tabela-slowek/

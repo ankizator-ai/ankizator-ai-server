@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "name": "Człowiek 1",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-czlowiek-1/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-1-czlowiek-tabela-slow//"
         }
     },
     {
@@ -12,7 +12,7 @@
         "pk": 2,
         "fields": {
             "name": "Dom 2 cz.I",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-dom-2-cz-i/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-2-dom-cz-1-tabela-slow/"
         }
     },
     {
@@ -20,7 +20,7 @@
         "pk": 3,
         "fields": {
             "name": "Dom 2 cz.II",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-dom-2-cz-ii/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-2-dom-cz-2-tabela-slow/"
         }
     },
     {
@@ -28,7 +28,7 @@
         "pk": 4,
         "fields": {
             "name": "Szkoła cz.I",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-szkola/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-3-szkola-tabela-slow/"
         }
     },
     {
@@ -36,7 +36,7 @@
         "pk": 5,
         "fields": {
             "name": "Szkoła cz. II",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-szkola-2/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-3-szkola-tabela-slow/"
         }
     },
     {
@@ -44,7 +44,7 @@
         "pk": 6,
         "fields": {
             "name": "Praca",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-praca/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-4-praca-tabela-slow/"
         }
     },
     {
@@ -52,7 +52,7 @@
         "pk": 7,
         "fields": {
             "name": "Życie rodzinne i towarzyskie",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-zycie-rodzinne/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-5-zycie-rodzinne-tabela-slow/"
         }
     },
     {
@@ -60,7 +60,7 @@
         "pk": 8,
         "fields": {
             "name": "Żywienie",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-zywienie/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-6-zywienie-tabela-slow/"
         }
     },
     {
@@ -68,7 +68,7 @@
         "pk": 9,
         "fields": {
             "name": "Zakupy i usługi",
-            "url": "https://merula.pl/angielski-repetytorium-jednotomowe-pearson-poziom-rozszerzony-zakupy-i-uslugi/"
+            "url": "https://merula.pl/jezyk-angielski/repetytorium-jednotomowe-pr-rozdzial-7-zakupy-i-uslugi-tabela-slow/"
         }
     }
 ]

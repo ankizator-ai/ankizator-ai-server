@@ -8,6 +8,10 @@ from api.generate_context import WordsSchema, generate_example_contexts, add_wor
 
 api = NinjaAPI()
 
+# TODO: remove it
+def return_json(response):
+    return JsonResponse({'data': response}, json_dumps_params={'ensure_ascii': False}, safe=False)
+
 @api.post('/contexts')
 def generate_context(request, payload: WordsSchema):
     contexts_without_words = generate_example_contexts(payload)
@@ -17,8 +21,10 @@ def generate_context(request, payload: WordsSchema):
 @api.get('/sources')
 def get_sources(request):
     sources = list(Source.objects.values())
-    return JsonResponse(sources, safe=False)
+    return return_json(sources)
 
 @api.post('/words')
 def get_merula(request, payload: SourceSchema):
-    return JsonResponse(extract_tablepress_content(payload.dict()['source']), safe=False, json_dumps_params={'ensure_ascii': False})
+    source = payload.dict()['source']
+    words = extract_tablepress_content(source)
+    return return_json(words)

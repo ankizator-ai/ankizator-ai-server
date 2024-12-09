@@ -1,10 +1,16 @@
+import os
 from django.http import JsonResponse
 from ninja import NinjaAPI
 
+from api.extration import extract_tablepress_content, SourceSchema
 from api.models import Source
 from api.generate_context import WordsSchema, generate_example_contexts, add_words_to_examples
 
 api = NinjaAPI()
+
+# TODO: remove it
+def return_json(response):
+    return JsonResponse({'data': response}, json_dumps_params={'ensure_ascii': False}, safe=False)
 
 @api.post('/contexts')
 def generate_context(request, payload: WordsSchema):
@@ -15,4 +21,10 @@ def generate_context(request, payload: WordsSchema):
 @api.get('/sources')
 def get_sources(request):
     sources = list(Source.objects.values())
-    return JsonResponse(sources, safe=False)
+    return return_json(sources)
+
+@api.post('/words')
+def get_merula(request, payload: SourceSchema):
+    source = payload.dict()['source']
+    words = extract_tablepress_content(source)
+    return return_json(words)

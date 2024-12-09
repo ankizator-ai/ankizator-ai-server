@@ -78,18 +78,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-env = dotenv_values('.env')
 DATABASES = {
     'default': {
-        'ENGINE': 'djongo',
-        'NAME': 'ankizator',
-        'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': env['MONGODB_URL']
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -130,4 +124,8 @@ STATIC_URL = 'static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.scripts.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+INSTALLED_APPS += ['corsheaders']
+MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware']
+CORS_ALLOW_ALL_ORIGINS = True

@@ -3,9 +3,13 @@ from bs4 import BeautifulSoup
 import requests
 import re
 
+from ninja import Schema
+
+
+class SourceSchema(Schema):
+    source: str
 
 def extract_tablepress_content(url):
-    # Fetch the HTML content from the URL
     response = requests.get(url)
     if response.status_code != 200:
         print(f"Failed to retrieve URL: {url}")

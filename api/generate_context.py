@@ -7,8 +7,6 @@ import google.generativeai as genai
 from dotenv import dotenv_values
 import typing_extensions as typing
 
-from config.tools import get_env
-
 
 class ContextSchema(Schema):
     pl: str

@@ -14,22 +14,20 @@ from pathlib import Path
 
 from dotenv import dotenv_values
 
-#from config.tools import get_env
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = dotenv_values('.env')
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p^nc3!h$lwhjcsyr23&cz-%)3@hf_#_b3hehm2wl-p1x$+rult'
+SECRET_KEY = env['SECRET_KEY']
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env['DEBUG']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env['ALLOWED_HOST'].split(' ')
 
 
 # Application definition

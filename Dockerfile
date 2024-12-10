@@ -1,4 +1,4 @@
-FROM python:3.11-slim-buster
+FROM python
 
 WORKDIR /app
 
@@ -8,6 +8,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
+RUN python manage.py loaddata api/fixtures/sources.json
+CMD ["python", "manage.py", "runserver", "80"]
 
-CMD ["python", "manage.py", "runserver"]
+EXPOSE 80

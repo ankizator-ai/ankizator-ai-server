@@ -30,7 +30,6 @@ pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pydantic==2.10.2
 pydantic_core==2.27.1
-pymongo==3.11.4
 pyparsing==3.2.0
 python-dotenv==1.0.1
 pytz==2024.2

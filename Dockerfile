@@ -1,15 +1,20 @@
-FROM python
+FROM python:3.13-bookworm
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
+COPY requirements.txt .
+RUN apt-get update -y && \
+    apt-get install -y netcat-traditional && \
+    #pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-RUN pip install -r requirements.txt
+COPY ./entrypoint.sh .
+RUN chmod +x /app/entrypoint.sh
 
 COPY . .
 
-RUN python manage.py migrate
-RUN python manage.py loaddata api/fixtures/sources.json
-CMD ["python", "manage.py", "runserver", "80"]
-
-EXPOSE 80
+ENTRYPOINT ["/app/entrypoint.sh"]

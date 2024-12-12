@@ -1,13 +1,20 @@
-FROM python:3.11-slim-buster
+FROM python:3.13-bookworm
+
+ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY requirements.txt requirements.txt
+COPY requirements.txt .
+RUN apt-get update -y && \
+    apt-get install -y netcat-traditional && \
+    #pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-RUN pip install -r requirements.txt
+COPY ./entrypoint.sh .
+RUN chmod +x /app/entrypoint.sh
 
 COPY . .
 
-EXPOSE 5000
-
-CMD ["python", "manage.py", "runserver"]
+ENTRYPOINT ["/app/entrypoint.sh"]

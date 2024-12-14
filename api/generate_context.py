@@ -35,11 +35,17 @@ def get_words_list(words_schema: WordsSchema):
     words = words_dict['words']
     return words
 
-def generate_example_contexts(words: WordsSchema):
+def split_words_payload(words: WordsSchema):
+    words = get_words_list(words)
+    chunk_size = 30
+    split_arrays = [words[i: i + chunk_size] for i in range(0, len(words), chunk_size)]
+    return split_arrays
+
+def generate_example_contexts(words: List[WordsPairSchema]):
     config = dotenv_values(".env")
     genai.configure(api_key=config["GENAI_API_KEY"])
     model = genai.GenerativeModel("gemini-1.5-flash")
-    dumped_words = json.dumps(get_words_list(words))
+    dumped_words = json.dumps(words)
     query_format = "This is array of pairs of words (pl, en_GB): {json_arr}. Provide one grammatically correct example usage per pair. Used word bold in markdown."
     print(query_format.format(json_arr=dumped_words))
     response = model.generate_content(query_format.format(json_arr=dumped_words),
@@ -51,9 +57,9 @@ def generate_example_contexts(words: WordsSchema):
     first_text_in_response = response.candidates[0].content.parts[0].text
     return json.loads(first_text_in_response)
 
-def add_words_to_examples(words_schema: WordsSchema, context):
+def add_words_to_examples(words_schema: List[WordsPairSchema], context):
     contexts_with_words = []
-    words = get_words_list(words_schema)
+    words = words_schema
     for i, context_without_words in enumerate(context):
         words_pair = words[i]
         context_with_words = WordsPairWithContextSchema(wordsPair=words_pair, context=context_without_words)

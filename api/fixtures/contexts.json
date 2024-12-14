@@ -1,0 +1,45 @@
+[
+    {
+        "model": "api.context",
+        "pk": 1,
+        "fields": {
+            "pl": "Jej **nazwisko panieńskie** to Smith.",
+            "en": "Her **maiden name** was Smith.",
+            "example": 1
+        }
+    },
+    {
+        "model": "api.context",
+        "pk": 2,
+        "fields": {
+            "pl": "Jego **drugie imię** to Robert.",
+            "en": "His **middle name** is Robert.",
+            "example": 2
+    }    },
+    {
+        "model": "api.context",
+        "pk": 3,
+        "fields": {
+            "pl": "Policja skontaktowała się z jego **najbliższą osobą z rodziny**.",
+            "en": "The police contacted his **next of kin**.",
+            "example": 3
+        }
+    },
+    {
+        "model": "api.context",
+        "pk": 4,
+        "fields": {
+            "pl": "Jego **zawód** to nauczyciel.",
+            "en": "His **occupation** is a teacher.",
+            "example": 4
+    }    },
+    {
+        "model": "api.context",
+        "pk": 5,
+        "fields": {
+            "pl": "Należy do polskiej **grupy etnicznej**.",
+            "en": "She belongs to the Polish **ethnic group**.",
+            "example": 5
+        }
+    }
+]

@@ -3,8 +3,8 @@
         "model": "api.word",
         "pk": 1,
         "fields": {
-            "pl": "nazwisko panieńskie",
-            "en": "maiden name",
+            "og": "nazwisko panieńskie",
+            "tr": "maiden name",
             "example": 1
         }
     },
@@ -12,8 +12,8 @@
         "model": "api.word",
         "pk": 2,
         "fields": {
-            "pl": "drugie imię",
-            "en": "middle name",
+            "og": "drugie imię",
+            "tr": "middle name",
             "example": 2
         }
     },
@@ -21,8 +21,8 @@
         "model": "api.word",
         "pk": 3,
         "fields": {
-            "pl": "najbliższa osoba z rodziny",
-            "en": "next of kin",
+            "og": "najbliższa osoba z rodziny",
+            "tr": "next of kin",
             "example": 3
         }
     },
@@ -30,8 +30,8 @@
         "model": "api.word",
         "pk": 4,
         "fields": {
-            "pl": "zawód",
-            "en": "occupation",
+            "og": "zawód",
+            "tr": "occupation",
             "example": 4
         }
     },
@@ -39,8 +39,8 @@
         "model": "api.word",
         "pk": 5,
         "fields": {
-            "pl": "grupa etniczna",
-            "en": "ethnic group",
+            "og": "grupa etniczna",
+            "tr": "ethnic group",
             "example": 5
         }
     }

@@ -1,11 +1,11 @@
-import os
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from ninja import NinjaAPI
 
+from api.collections.schemas import CollectionOut
 from api.extration import extract_tablepress_content, SourceSchema
 from api.generate_anki_deck import generate_anki_deck
 from api.models import Collection
-from api.generate_context import WordsSchema, generate_example_contexts, add_words_to_examples, WordsWithContextSchema, \
+from api.collections.contexts.generate_context import WordsSchema, generate_example_contexts, add_words_to_examples, WordsWithContextSchema, \
     split_words_payload
 
 api = NinjaAPI()
@@ -14,10 +14,9 @@ api = NinjaAPI()
 def return_json(response):
     return JsonResponse({'data': response}, json_dumps_params={'ensure_ascii': False}, safe=False)
 
-@api.get('/collections')
+@api.get('/collections', response=list[CollectionOut])
 def get_sources(request):
-    sources = list(Collection.objects.values())
-    return return_json(sources)
+    return Collection.objects.values()
 
 @api.post('/contexts')
 def generate_context(request, payload: WordsSchema):

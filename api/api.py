@@ -4,9 +4,9 @@ from ninja import NinjaAPI
 from api.collections.schemas import CollectionOut
 from api.extration import extract_tablepress_content, SourceSchema
 from api.generate_anki_deck import generate_anki_deck
-from api.models import Collection
-from api.collections.contexts.generate_context import WordsSchema, generate_example_contexts, add_words_to_examples, WordsWithContextSchema, \
-    split_words_payload
+from api.generate_context import WordsSchema, split_words_payload, generate_example_contexts, add_words_to_examples, \
+    WordsWithContextSchema
+from api.models import Collection, Word
 
 api = NinjaAPI()
 
@@ -18,6 +18,13 @@ def return_json(response):
 def get_sources(request):
     return Collection.objects.values()
 
+@api.post('/collections/{collection_id}/words')
+def post_contexts_words(request, collection_id: int):
+    collection = Collection.objects.get(id=collection_id)
+    Word.objects.filter(collection=collection).delete()
+    words = extract_tablepress_content(collection)
+    Word.objects.bulk_create(words)
+
 @api.post('/contexts')
 def generate_context(request, payload: WordsSchema):
     split_words = split_words_payload(payload)
@@ -27,12 +34,6 @@ def generate_context(request, payload: WordsSchema):
         contexts_with_words = add_words_to_examples(words, contexts_without_words)
         final_contexts_with_words.extend(contexts_with_words)
     return final_contexts_with_words
-
-@api.post('/words')
-def get_merula(request, payload: SourceSchema):
-    source = payload.dict()['source']
-    words = extract_tablepress_content(source)
-    return return_json(words)
 
 @api.post('/anki')
 def post_anki_deck(request, payload: WordsWithContextSchema):

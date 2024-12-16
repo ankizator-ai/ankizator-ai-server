@@ -10,6 +10,7 @@ class Example(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Word(models.Model):
+    collection = models.ForeignKey(Collection, on_delete=models.CASCADE)
     og = models.CharField(max_length=255)
     tr = models.CharField(max_length=255)
     example = models.ForeignKey(Example, on_delete=models.CASCADE, null=True)

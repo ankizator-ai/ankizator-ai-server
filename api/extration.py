@@ -5,14 +5,16 @@ import re
 
 from ninja import Schema
 
+from api.models import Word
+
 
 class SourceSchema(Schema):
     source: str
 
-def extract_tablepress_content(url):
-    response = requests.get(url)
+def extract_tablepress_content(collection):
+    response = requests.get(collection.url)
     if response.status_code != 200:
-        print(f"Failed to retrieve URL: {url}")
+        print(f"Failed to retrieve URL: {collection.url}")
         return None
 
     html_content = response.text
@@ -33,6 +35,6 @@ def extract_tablepress_content(url):
         if len(columns) == 2:
             polish = columns[0].get_text(strip=True)
             english = columns[1].get_text(strip=True)
-            extracted_data.append({"pl": polish, "en": english})
+            extracted_data.append(Word(collection=collection, og=polish, tr=english))
 
     return extracted_data

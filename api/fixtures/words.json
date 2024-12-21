@@ -5,8 +5,7 @@
         "fields": {
             "collection": 1,
             "og": "nazwisko panieńskie",
-            "tr": "maiden name",
-            "example": 1
+            "tr": "maiden name"
         }
     },
     {
@@ -15,8 +14,7 @@
         "fields": {
             "collection": 1,
             "og": "drugie imię",
-            "tr": "middle name",
-            "example": 2
+            "tr": "middle name"
         }
     },
     {
@@ -25,8 +23,7 @@
         "fields": {
             "collection": 1,
             "og": "najbliższa osoba z rodziny",
-            "tr": "next of kin",
-            "example": 3
+            "tr": "next of kin"
         }
     },
     {
@@ -35,8 +32,7 @@
         "fields": {
             "collection": 1,
             "og": "zawód",
-            "tr": "occupation",
-            "example": 4
+            "tr": "occupation"
         }
     },
     {
@@ -45,8 +41,7 @@
         "fields": {
             "collection": 1,
             "og": "grupa etniczna",
-            "tr": "ethnic group",
-            "example": 5
+            "tr": "ethnic group"
         }
     }
 

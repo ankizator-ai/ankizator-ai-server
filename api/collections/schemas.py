@@ -1,8 +1,20 @@
-from ninja import ModelSchema
-from ..models import Collection
+from ninja import ModelSchema, Schema
+from ..models import Collection, Word
 
-class CollectionOut(ModelSchema):
+class CollectionSchema(ModelSchema):
     class Meta:
         model = Collection
         fields = ['id', 'name']
 
+class WordSchema(ModelSchema):
+    class Meta:
+        model = Word
+        fields = ['id', 'og', 'tr']
+
+class ExampleSchema(Schema):
+    class Word:
+        og: str
+        tr: str
+    class Context:
+        og: str
+        tr: str

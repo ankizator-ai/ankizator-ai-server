@@ -11,6 +11,11 @@ class WordSchema(ModelSchema):
         model = Word
         fields = ['id', 'og', 'tr']
 
+class PlainWordSchema(ModelSchema):
+    class Meta:
+        model = Word
+        fields = ['og', 'tr']
+
 class ExampleSchema(Schema):
     class Word:
         og: str

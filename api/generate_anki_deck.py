@@ -9,8 +9,8 @@ from api.models import Collection, Context
 
 def generate_anki_deck(collection_id):
     my_model = genanki.Model(
-        1607392319,
-        'AnkizatorAI',
+        1612738572,
+    'AnkizatorAI',
         fields=[
             {'name': 'og_word'},
             {'name': 'tr_word'},
@@ -19,22 +19,53 @@ def generate_anki_deck(collection_id):
         ],
         templates=[
             {
-                'name': 'Card 1',
-                'qfmt': '{{og_word}}{{tts pl_PL:og_word}}<br>{{og_context}}{{tts pl_PL:og_context}}',
-                'afmt': '{{FrontSide}}<hr id="answer">{{tr_word}}{{tts en_US:tr_word}}<br>{{tr_context}}{{tts en_US:tr_context}}',
+                'name': 'Card 1: (original word+context -> translated word+context)',
+                'qfmt': """
+                    <div class="front">
+                    	<div class="word row">{{tts pl_PL:og_word}}{{og_word}}</div>
+                    	<div class="row">
+                    		{{tts pl_PL:og_context}}
+                    		<span class="context">{{og_context}}</span>
+                    	</div>
+                    </div>
+                """,
+                'afmt': """
+                    {{FrontSide}}
+                    <hr id="answer">
+                    <div class="back">
+                    		<div class="word row">{{tts en_US:tr_word}}{{tr_word}}</div>
+                    		<div class="row">
+                    			{{tts en_US:tr_context}}
+                    			<span class="context">{{tr_context}}</span>
+                    </div>
+                    </div> 
+                """
             },
-        ])
+        ],
+        css="""
+        .front, .back {
+        	width: 40em;
+        	margin: auto;
+        }
+        
+        .word {
+        	font-size: 2em;
+        	font-weight: 600;
+        }
+        
+        .context {
+        	font-style: italic;
+        }""")
 
-    my_deck = genanki.Deck(  2059400110,'AnkizatorAI::Chapter 1')
 
     collection = Collection.objects.get(id=collection_id)
+    collection_name = getattr(collection, 'name')
+    my_deck = genanki.Deck(2024749016+collection_id,f'AnkizatorAI::{collection_name}')
     contexts = Context.objects.filter(word__collection=collection).prefetch_related()
 
     for context in contexts:
-        raw_pl_context = markdown.markdown(context.og)
-        raw_en_context = markdown.markdown(context.tr)
-        pl_context = html.escape(raw_pl_context)
-        en_context = html.escape(raw_en_context)
+        pl_context = markdown.markdown(context.og)
+        en_context = markdown.markdown(context.tr)
         my_note = genanki.Note(
             model=my_model,
             fields=[context.word.og, context.word.tr, pl_context, en_context],)
@@ -43,6 +74,6 @@ def generate_anki_deck(collection_id):
     genanki.Package(my_deck).write_to_file(filename)
 
     response = FileResponse(open(filename, 'rb'), content_type="application/octet-stream")
-    response['Content-Disposition'] = 'attachment; filename="generated_anki_deck.apkg"'
+    response['Content-Disposition'] = f'attachment; filename="{collection_name}.apkg"'
 
     return response

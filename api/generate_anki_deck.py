@@ -44,8 +44,9 @@ def generate_anki_deck(collection_id):
         ],
         css="""
         .front, .back {
-        	width: 40em;
+        	max-width: 40em;
         	margin: auto;
+        	padding: 1em;
         }
         
         .word {

@@ -1,8 +1,10 @@
 from django.http import JsonResponse
 from ninja import NinjaAPI, Schema
+from ninja.pagination import paginate, PageNumberPagination
 
 from api.collections.schemas import CollectionSchema, WordSchema, PlainWordSchema
 from api.extration import extract_tablepress_content
+from api.generate_anki_deck import generate_anki_deck
 from api.models import Collection, Word, Context
 from api.collections.contexts.generate_context import generate_example_contexts
 
@@ -33,6 +35,7 @@ def get_collections_extract(request, collection_id: int):
     return 200, words
 
 @api.get('/collections/{collection_id}/words', response=list[WordSchema])
+@paginate(PageNumberPagination, page_size=30)
 def get_collections_words(request, collection_id: int, all_words: bool = False):
     collection = Collection.objects.get(id=collection_id)
     if all_words:
@@ -84,6 +87,6 @@ def generate_context(request, payload: list[int], collection_id: int):
 
     Context.objects.bulk_create(context_objects)
 
-# @api.post('/anki')
-# def post_anki_deck(request, payload: WordsWithContextSchema):
-#     return generate_anki_deck(payload)
+@api.get('/collections/{collection_id}/anki')
+def get_anki_deck(request, collection_id: int):
+    return generate_anki_deck(collection_id)

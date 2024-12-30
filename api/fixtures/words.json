@@ -1,0 +1,48 @@
+[
+    {
+        "model": "api.word",
+        "pk": 1,
+        "fields": {
+            "collection": 1,
+            "og": "nazwisko panieńskie",
+            "tr": "maiden name"
+        }
+    },
+    {
+        "model": "api.word",
+        "pk": 2,
+        "fields": {
+            "collection": 1,
+            "og": "drugie imię",
+            "tr": "middle name"
+        }
+    },
+    {
+        "model": "api.word",
+        "pk": 3,
+        "fields": {
+            "collection": 1,
+            "og": "najbliższa osoba z rodziny",
+            "tr": "next of kin"
+        }
+    },
+    {
+        "model": "api.word",
+        "pk": 4,
+        "fields": {
+            "collection": 1,
+            "og": "zawód",
+            "tr": "occupation"
+        }
+    },
+    {
+        "model": "api.word",
+        "pk": 5,
+        "fields": {
+            "collection": 1,
+            "og": "grupa etniczna",
+            "tr": "ethnic group"
+        }
+    }
+
+]

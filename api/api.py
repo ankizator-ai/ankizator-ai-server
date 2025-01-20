@@ -47,10 +47,7 @@ def get_collections_words(request, collection_id: int, all_words: bool = False):
 def post_collections_words(request, collection_id: int, payload: list[PlainWordSchema]):
     try:
         collection = Collection.objects.get(id=collection_id)
-    except Collection.DoesNotExist:
-        return collection_404()
 
-    try:
         og_tr_pairs = [(word_data.og, word_data.tr) for word_data in payload]
         existing_words = Word.objects.filter(
             collection=collection,
@@ -65,6 +62,8 @@ def post_collections_words(request, collection_id: int, payload: list[PlainWordS
 
         if new_words:
             Word.objects.bulk_create(new_words)
+    except Collection.DoesNotExist:
+        return collection_404()
     except Exception as e:
             return 400, {"message": f"Failed to create words: {str(e)}"}
 

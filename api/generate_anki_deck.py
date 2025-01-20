@@ -1,7 +1,6 @@
-import html
-import io
 import markdown
 import genanki
+import os
 from django.http import FileResponse
 
 from api.models import Collection, Context
@@ -72,9 +71,11 @@ def generate_anki_deck(collection_id):
             fields=[context.word.og, context.word.tr, pl_context, en_context],)
         my_deck.add_note(my_note)
     filename = "anki_deck.apkg"
-    genanki.Package(my_deck).write_to_file(filename)
+    cache_dir = "/var/cache/ankizator-ai"
+    file_path = os.path.join(cache_dir, filename)
+    genanki.Package(my_deck).write_to_file(file_path)
 
-    response = FileResponse(open(filename, 'rb'), content_type="application/octet-stream")
+    response = FileResponse(open(file_path, 'rb'), content_type="application/octet-stream")
     response['Content-Disposition'] = f'attachment; filename="{collection_name}.apkg"'
 
     return response

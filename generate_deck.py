@@ -89,7 +89,7 @@ def scrap(collection_id):
 
 def generate_contexts(collection_id):
     starting_page = 1
-    items_per_page = 30
+    items_per_page = config("WORDS_PAGE_SIZE", cast=int)
 
     first_words = get_collections_words(collection_id, starting_page)
     float_pages = first_words['count'] / items_per_page

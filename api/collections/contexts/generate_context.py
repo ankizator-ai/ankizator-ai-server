@@ -1,25 +1,40 @@
-import json
+import concurrent.futures
+import os
+
 import google.generativeai as genai
-import typing_extensions
-from dotenv import dotenv_values
-from api.collections.schemas import WordSchema
+from api.models import Context, Word
+from decouple import config
 
-class Example(typing_extensions.TypedDict):
-    og: str
-    tr: str
-
-def generate_example_contexts(words):
-    config = dotenv_values(".env")
-    genai.configure(api_key=config["GENAI_API_KEY"])
-    model = genai.GenerativeModel(config["GENAI_MODEL"])
-    string_words = [f"{word['og']},{word['tr']}" for word in words]
-    query_format = "This is array of pairs of words separated by ';'. First is in pl, and second in en_GB: {words}. Provide one grammatically correct example sentence per pair. First word need sentence in og and second in tr. Used word bold in markdown."
-    processed_query = query_format.format(words=';'.join(string_words))
-    config = genai.GenerationConfig(
-        response_mime_type="application/json",
-        response_schema=list[Example]
+def prettify_context(word, context) -> Context:
+    return Context(
+        word=word,
+        og=context[0],
+        tr=context[1],
     )
-    response = model.generate_content(processed_query, generation_config=config)
 
+def generate_context(word: Word) -> Context:
+    genai.configure(api_key=config("GENAI_API_KEY"))
+    model = genai.GenerativeModel(config("GENAI_MODEL"))
+    query = f"{word.og};{word.tr}"
+    response = model.generate_content(query)
     first_response = response.candidates[0].content.parts[0].text
-    return json.loads(first_response)
+    context = first_response.split(";")
+    return prettify_context(word, context)
+
+
+def generate_every_example(words):
+    examples = []
+    words_set = words.all()
+    unfinished_words = {word: False for word in words_set}
+
+    while not all(item for item in unfinished_words.values()):
+        with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
+           future_to_word = {executor.submit(generate_context, word): word for word, success in unfinished_words.items() if success == False}
+           for future in concurrent.futures.as_completed(future_to_word):
+               try:
+                   word = future_to_word[future]
+                   examples.append(future.result())
+                   unfinished_words[word] = True
+               except Exception as exc:
+                   continue
+    return examples

@@ -6,7 +6,8 @@ from api.collections.schemas import CollectionSchema, WordSchema, PlainWordSchem
 from api.extration import extract_tablepress_content
 from api.generate_anki_deck import generate_anki_deck
 from api.models import Collection, Word, Context
-from api.collections.contexts.generate_context import generate_example_contexts
+from api.collections.contexts.generate_context import generate_every_example
+from decouple import config
 
 api = NinjaAPI()
 
@@ -35,7 +36,7 @@ def get_collections_extract(request, collection_id: int):
     return 200, words
 
 @api.get('/collections/{collection_id}/words', response=list[WordSchema])
-@paginate(PageNumberPagination, page_size=30)
+@paginate(PageNumberPagination, page_size=config('WORDS_PAGE_SIZE', cast=int))
 def get_collections_words(request, collection_id: int, all_words: bool = False):
     collection = Collection.objects.get(id=collection_id)
     if all_words:
@@ -74,16 +75,8 @@ def generate_context(request, payload: list[int], collection_id: int):
     words = Word.objects.filter(id__in=payload, collection_id=collection_id)
     if not words.exists():
         return JsonResponse({'error': 'No words found for the given IDs and collection.'}, status=404)
-    contexts_data = generate_example_contexts(words.values())
-    context_objects = [
-        Context(
-            word=words[key],
-            og=context['og'],
-            tr=context['tr']
-    )
-        for key, context in enumerate(contexts_data)
-    ]
 
+    context_objects= generate_every_example(words)
     Context.objects.bulk_create(context_objects)
 
 @api.get('/collections/{collection_id}/anki')

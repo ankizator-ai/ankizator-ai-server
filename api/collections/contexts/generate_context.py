@@ -12,13 +12,38 @@ def prettify_context(word, context) -> Context:
         tr=context[1],
     )
 
+safety_settings=[
+  {
+    "category": "HARM_CATEGORY_DANGEROUS",
+    "threshold": "BLOCK_NONE",
+  },
+  {
+    "category": "HARM_CATEGORY_HARASSMENT",
+    "threshold": "BLOCK_NONE",
+  },
+  {
+    "category": "HARM_CATEGORY_HATE_SPEECH",
+    "threshold": "BLOCK_NONE",
+  },
+  {
+    "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+    "threshold": "BLOCK_NONE",
+  },
+  {
+    "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+    "threshold": "BLOCK_NONE",
+  },
+]
+
 def generate_context(word: Word) -> Context:
     genai.configure(api_key=config("GENAI_API_KEY"))
-    model = genai.GenerativeModel(config("GENAI_MODEL"))
+    generation_config = genai.GenerationConfig(temperature=1.0)
+    model = genai.GenerativeModel(config("GENAI_MODEL"), safety_settings=safety_settings, generation_config=generation_config)
     query = f"{word.og};{word.tr}"
     response = model.generate_content(query)
     first_response = response.candidates[0].content.parts[0].text
     context = first_response.split(";")
+    print(context)
     return prettify_context(word, context)
 
 
@@ -36,5 +61,8 @@ def generate_every_example(words):
                    examples.append(future.result())
                    unfinished_words[word] = True
                except Exception as exc:
+                   print("Fail:", exc)
                    continue
+
+    print("GENERATED EXAMPLES:", examples)
     return examples

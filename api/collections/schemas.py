@@ -1,5 +1,6 @@
 from ninja import ModelSchema, Schema
-from ..models import Collection, Word
+from ..models import Collection, Word, Context
+
 
 class CollectionSchema(ModelSchema):
     class Meta:
@@ -11,15 +12,16 @@ class WordSchema(ModelSchema):
         model = Word
         fields = ['id', 'og', 'tr']
 
+class ContextSchema(ModelSchema):
+    class Meta:
+        model = Context
+        fields = ['id', 'og', 'tr']
+
 class PlainWordSchema(ModelSchema):
     class Meta:
         model = Word
         fields = ['og', 'tr']
 
 class ExampleSchema(Schema):
-    class Word:
-        og: str
-        tr: str
-    class Context:
-        og: str
-        tr: str
+    word: WordSchema
+    context: ContextSchema

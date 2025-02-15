@@ -110,19 +110,21 @@ def main():
 
     args = parser.parse_args()
 
-    collections = get_collections()
+    collections_list = get_collections()
+    collections_dict = {collection['id']: collection for collection in collections_list}
     if args.print:
-        for collection in collections:
-            print(f"{collection['id']} - {collection['name']}")
+        for coll_id, collection in collections_dict.items():
+            print(f"{coll_id} - {collection['name']}")
         return
 
-    if args.collection in [collection['id'] for collection in collections]:
+
+    if args.collection in collections_dict.keys():
         coll_id = args.collection
     else:
         print("Collection not found!")
         return
 
-    print(f"Selected collection: {coll_id} - {collections[coll_id]['name']}")
+    print(f"Selected collection: {coll_id} - {collections_dict[coll_id]['name']}")
 
     if args.truncate:
         truncate_contexts(coll_id)

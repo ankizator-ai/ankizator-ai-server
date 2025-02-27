@@ -85,9 +85,9 @@ def generate_context(request, payload: list[int], collection_id: int):
     words = Word.objects.filter(id__in=payload, collection_id=collection_id)
     if not words.exists():
         return JsonResponse({'error': 'No words found for the given IDs and collection.'}, status=404)
-
-    context_objects= generate_every_example(words)
+    context_objects = generate_every_example(words)
     Context.objects.bulk_create(context_objects)
+    return JsonResponse({'message': 'Contexts generated successfully!'}, status=201)
 
 @router.delete('/{collection_id}/contexts')
 def generate_context(request, payload: list[int], collection_id: int):

@@ -39,30 +39,33 @@ def generate_context(word: Word) -> Context:
     genai.configure(api_key=config("GENAI_API_KEY"))
     generation_config = genai.GenerationConfig(temperature=1.0)
     model = genai.GenerativeModel(config("GENAI_MODEL"), safety_settings=safety_settings, generation_config=generation_config)
-    query = f"{word.og};{word.tr}"
+    query = f"This is pair of words. Polish: '{word.og}' and british english: '{word.tr}'. Provide one grammatically correct example pair of polish and english sentences with same meaning. Provided words bold in markdown. Return ONLY contexts separated by semicolon. Use sophisticated words, structures. Both versions should have at least 8 words"
     response = model.generate_content(query)
     first_response = response.candidates[0].content.parts[0].text
     context = first_response.split(";")
     print(context)
     return prettify_context(word, context)
 
-
 def generate_every_example(words):
     examples = []
-    words_set = words.all()
-    unfinished_words = {word: False for word in words_set}
+    words_set = list(words)
+    finished_words = {word: {"finished": False, "retries": 0} for word in words_set}
+    max_retries = config("GENAI_MAX_RETRIES", cast=int)
 
-    while not all(item for item in unfinished_words.values()):
+    while not all(word['finished'] or word['retries'] >= max_retries for word in finished_words.values()):
         with concurrent.futures.ThreadPoolExecutor(max_workers=os.cpu_count()) as executor:
-           future_to_word = {executor.submit(generate_context, word): word for word, success in unfinished_words.items() if success == False}
-           for future in concurrent.futures.as_completed(future_to_word):
-               try:
-                   word = future_to_word[future]
-                   examples.append(future.result())
-                   unfinished_words[word] = True
-               except Exception as exc:
-                   print("Fail:", exc)
-                   continue
+            future_to_word = {
+                executor.submit(generate_context, word): word
+                for word, state in finished_words.items() if not state['finished'] and state['retries'] < max_retries
+            }
+            for future in concurrent.futures.as_completed(future_to_word):
+                try:
+                    word = future_to_word[future]
+                    examples.append(future.result())
+                    finished_words[word]['finished'] = True
+                except Exception as exc:
+                    print(f"Error processing word {exc}")
+                    finished_words[word]['retries'] += 1
 
     print("GENERATED EXAMPLES:", examples)
     return examples

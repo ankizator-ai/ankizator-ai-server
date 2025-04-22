@@ -39,7 +39,7 @@ def generate_context(word: Word) -> Context:
     genai.configure(api_key=config("GENAI_API_KEY"))
     generation_config = genai.GenerationConfig(temperature=1.0)
     model = genai.GenerativeModel(config("GENAI_MODEL"), safety_settings=safety_settings, generation_config=generation_config)
-    query = f"This is pair of words. Polish: '{word.og}' and british english: '{word.tr}'. Provide one grammatically correct example pair of polish and english sentences with same meaning. Provided words bold in markdown. Return ONLY contexts separated by semicolon. Use sophisticated words, structures. Both versions should have at least 8 words"
+    query = f"{word.og};{word.tr}"
     response = model.generate_content(query)
     first_response = response.candidates[0].content.parts[0].text
     context = first_response.split(";")

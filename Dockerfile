@@ -1,20 +1,13 @@
-FROM python:3.13-bookworm
+FROM python:3.13  
 
-ENV PIP_DISABLE_PIP_VERSION_CHECK 1
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
+RUN mkdir /app
 WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1 
+RUN pip install --upgrade pip 
+COPY requirements.txt  /app/
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . /app/
 
-COPY requirements.txt .
-RUN apt-get update -y && \
-    apt-get install -y netcat-traditional && \
-    #pip install --upgrade pip && \
-    pip install -r requirements.txt
-
-COPY ./entrypoint.sh .
-RUN chmod +x /app/entrypoint.sh
-
-COPY . .
-
-ENTRYPOINT ["/app/entrypoint.sh"]
+EXPOSE 8000
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

@@ -20,11 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
+ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", cast=Csv())
 
 
 # Application definition
@@ -79,7 +79,7 @@ DATABASES = {
         "NAME": config("DB_NAME"),
         "USER": config("DB_USERNAME"),
         "PASSWORD": config("DB_PASSWORD"),
-        "HOST": config("DB_HOSTNAME"),
+        "HOST": config("DB_HOST"),
         "PORT": config("DB_PORT", cast=int),
     }
 }

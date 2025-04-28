@@ -14,16 +14,17 @@ To run the application using Docker, follow these steps:
     docker compose build
     ```
 
-2.  **Run the Docker containers in development mode:**
-
-    ```bash
-    docker compose up --watch
-    ```
-
-3.  **Run database migrations:**
+2.  **Run database migrations and load data:**
 
     ```bash
     docker compose run web python manage.py migrate
+    docker compose run web python manage.py loaddata api/fixtures/collections.json
+    ```
+
+3.  **Run the Docker containers in development mode:**
+
+    ```bash
+    docker compose up --watch
     ```
 
 ## Production

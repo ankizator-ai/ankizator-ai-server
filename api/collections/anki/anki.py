@@ -19,43 +19,11 @@ def generate_anki_deck(collection_id):
         templates=[
             {
                 'name': 'Card 1: (original word+context -> translated word+context)',
-                'qfmt': """
-                    <div class="front">
-                    	<div class="word row">{{tts pl_PL:og_word}}{{og_word}}</div>
-                    	<div class="row">
-                    		{{tts pl_PL:og_context}}
-                    		<span class="context">{{og_context}}</span>
-                    	</div>
-                    </div>
-                """,
-                'afmt': """
-                    {{FrontSide}}
-                    <hr id="answer">
-                    <div class="back">
-                    		<div class="word row">{{tts en_US:tr_word}}{{tr_word}}</div>
-                    		<div class="row">
-                    			{{tts en_US:tr_context}}
-                    			<span class="context">{{tr_context}}</span>
-                    </div>
-                    </div> 
-                """
+                'qfmt': open('api/collections/anki/card_front.html').read(),
+                'afmt': open('api/collections/anki/card_back.html').read()
             },
         ],
-        css="""
-        .front, .back {
-        	max-width: 40em;
-        	margin: auto;
-        	padding: 1em;
-        }
-        
-        .word {
-        	font-size: 2em;
-        	font-weight: 600;
-        }
-        
-        .context {
-        	font-style: italic;
-        }""")
+        css=open('api/collections/anki/style.css').read())
 
 
     collection = Collection.objects.get(id=collection_id)

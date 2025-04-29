@@ -3,7 +3,7 @@ from ninja import Schema, Router
 
 from api.collections.schemas import CollectionSchema, WordSchema, PlainWordSchema, ExampleSchema
 from api.extration import extract_tablepress_content
-from api.generate_anki_deck import generate_anki_deck
+from api.collections.anki.anki import generate_anki_deck
 from api.models import Collection, Word, Context
 from api.collections.contexts.generate_context import generate_every_example
 

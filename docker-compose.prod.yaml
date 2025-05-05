@@ -1,26 +1,23 @@
 services:
+  db:
+    image: postgres:17
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
   web:
-    build: ./Dockerfile.prod
+    command: "gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    build: .
     restart: always
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    environment:
+      - DEBUG=False
     env_file:
       - ./.env
-    expose:
-      - 8000
     volumes:
       - .:/app
     depends_on:
       - redis
       - db
-  db:
-    image: postgres:13
-    restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
 
   redis:
     image: redis:7

@@ -14,6 +14,7 @@ RUN apt-get update -y && \
 
 COPY ./entrypoint.sh .
 RUN chmod +x /app/entrypoint.sh
+RUN mkdir -p /var/cache/ankizator-ai && chmod 770 /var/cache/ankizator-ai
 
 COPY . .
 

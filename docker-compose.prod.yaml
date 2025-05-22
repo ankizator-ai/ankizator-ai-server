@@ -1,34 +1,33 @@
 services:
-  web:
-    build: ./Dockerfile.prod
-    restart: always
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
-    env_file:
-      - ./.env
-    expose:
-      - 8000
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-      - db
   db:
-    image: postgres:13
+    image: postgres:17
     restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=${DB_USERNAME}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+    extends:
+      file: docker/base.yaml
+      service: db-base
 
   redis:
     image: redis:7
+    restart: always
+
+  web:
+    build: .
+    command: "gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    restart: always
+    environment:
+      DEBUG: False
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS-true}
+    depends_on:
+      - redis
+      - db
+    extends:
+      file: docker/base.yaml
+      service: web-base
 
   celery:
     build: .
-    restart: always
     command: celery -A config worker -l info
+    restart: always
     volumes:
       - .:/code
     env_file:
@@ -39,12 +38,13 @@ services:
       - web
 
   nginx:
-    build: ./nginx
+    build: ./docker/nginx
     restart: always
     ports:
       - ${NGINX_PORT}:80
     depends_on:
       - web
+    command: [nginx-debug, '-g', 'daemon off;']
 
 volumes:
   postgres_data:

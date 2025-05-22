@@ -1,12 +1,9 @@
-#!/bin/bash
-echo 'Waiting for postgres...'
+#!/bin/sh
 
-while ! nc -z $DB_HOSTNAME $DB_PORT; do
-    sleep 0.1
-done
-
+if [ "$RUN_MIGRATIONS" = "true" ]; then
 echo 'Running migrations...'
 python manage.py migrate
-python manage.py loaddata api/fixtures/sources.json
+python manage.py loaddata api/fixtures/collections.json
+fi
 
 exec "$@"

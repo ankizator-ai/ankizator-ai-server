@@ -36,15 +36,22 @@ safety_settings=[
 ]
 
 def generate_context(word: Word) -> Context:
-    genai.configure(api_key=config("GENAI_API_KEY"))
-    generation_config = genai.GenerationConfig(temperature=1.0)
-    model = genai.GenerativeModel(config("GENAI_MODEL"), safety_settings=safety_settings, generation_config=generation_config)
-    query = f"{word.og};{word.tr}"
-    response = model.generate_content(query)
-    first_response = response.candidates[0].content.parts[0].text
-    context = first_response.split(";")
-    print(context)
-    return prettify_context(word, context)
+    try:
+        genai.configure(api_key=config("GENAI_API_KEY"))
+        generation_config = genai.GenerationConfig(temperature=1.0)
+        model = genai.GenerativeModel(config("GENAI_MODEL"), safety_settings=safety_settings, generation_config=generation_config)
+        query = f"Generate a usage example for the word '{word.og}' in Polish and its translation '{word.tr}' in English. Respond only with one sentence in Polish and its translation in English, separated by a semicolon without empty space in front of it."
+        print(f"Sending to Gemini: {query}")
+        response = model.generate_content(query)
+        candidate = response.candidates[0]
+        first_response = candidate.content.parts[0].text
+        context = first_response.split(";")
+        print(f"Parsed context: {context}")
+        return prettify_context(word, context)
+
+    except Exception as e:
+        print(f"Exception in generate_context for word '{word.og}': {e}")
+        raise
 
 def generate_every_example(words):
     examples = []

@@ -90,11 +90,11 @@ def generate_context(request, payload: list[int], collection_id: int):
     return JsonResponse({'message': 'Contexts generated successfully!'}, status=201)
 
 @router.delete('/{collection_id}/contexts')
-def generate_context(request, payload: list[int], collection_id: int):
-    contexts = Context.objects.filter(id__in=payload, word__collection_id=collection_id).delete()
-    if not contexts[0]:
-        return JsonResponse({'error': 'No contexts found for the given IDs and collection.'}, status=404)
-    return 200, contexts
+def delete_context(request, collection_id: int):
+    deleted_count, _ = Context.objects.filter(word__collection_id=collection_id).delete()
+    if deleted_count == 0:
+        return JsonResponse({'error': 'No contexts found for this collection.'}, status=404)
+    return JsonResponse({'deleted': deleted_count})
 
 
 @router.get('/{collection_id}/anki')

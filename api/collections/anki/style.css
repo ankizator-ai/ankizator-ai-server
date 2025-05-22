@@ -1,0 +1,14 @@
+.front, .back {
+	max-width: 40em;
+	margin: auto;
+	padding: 1em;
+}
+
+.word {
+	font-size: 2em;
+	font-weight: 600;
+}
+
+.context {
+	font-style: italic;
+}

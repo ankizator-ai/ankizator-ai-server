@@ -5,7 +5,6 @@ services:
       service: db-base
     ports:
       - "5432:5432"
-
   web:
     ports:
       - "8000:8000"

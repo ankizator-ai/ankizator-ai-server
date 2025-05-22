@@ -6,42 +6,39 @@ This project is the backend server for Ankizator AI, a tool for generating Anki 
 
 ## Docker Setup
 
-To run the application using Docker, follow these steps:
+There are several ways of running Ankizator in docker
 
-1.  **Build the Docker image:**
+### Build for the first time *(note the `true` case)*
 
-    ```bash
-    docker compose build
-    ```
+```bash
+RUN_MIGRATIONS=true docker compose up --build --watch
+```
 
-2.  **Run database migrations and load data:**
+### Normal usage after build
 
-    ```bash
-    docker compose run web python manage.py migrate
-    docker compose run web python manage.py loaddata api/fixtures/collections.json
-    ```
+```bash
+docker compose up --watch
+```
 
-3.  **Run the Docker containers in development mode:**
+### Testing
 
-    ```bash
-    docker compose up --watch
-    ```
+```bash
+docker compose --profile test up --watch
+```
+
+### Full testing *(note the `True` case)*
+
+```bash
+RUN_HEAVY_TESTS=True docker compose --profile test up --watch
+```
 
 ## Production
 
-To run the application in production, follow these steps:
+To run the application in production, just run:
 
-1.  **Build the Docker image:**
-
-    ```bash
-    docker compose -f docker-compose.prod.yaml up --build
-    ```
-
-2.  **Run the Docker containers:**
-
-    ```bash
-    docker compose -f docker-compose.prod.yaml up -d
-    ```
+```bash
+docker compose -f docker-compose.prod.yaml up --build -d
+```
 
 ## Development
 
@@ -66,8 +63,14 @@ For local development, you can use the following steps:
     python manage.py migrate
     ```
 
-4.  **Start the development server:**
+4.  **Run the migrations:**
 
     ```bash
-    python manage.py runserver --watch
+    python manage.py loaddata api/fixtures/collections.json
+    ```
+
+5.  **Start the development server:**
+
+    ```bash
+    python manage.py runserver
     ```

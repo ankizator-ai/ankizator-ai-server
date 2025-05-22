@@ -2,11 +2,24 @@ import json
 
 from django.test import TestCase, Client
 from api.models import Word, Context, Collection
+<<<<<<< HEAD
+from decouple import config
+import json
+=======
+>>>>>>> master
 
 def delete_ids(list_to_process):
     for piece in list_to_process:
         del piece['id']
 
+<<<<<<< HEAD
+def heavy_test(func):
+    def wrapper(*args, **kwargs):
+        if config("RUN_HEAVY_TESTS", default=False, cast=bool):
+            func(*args, **kwargs)
+    return wrapper
+=======
+>>>>>>> master
 
 class ApiTests(TestCase):
     def setUp(self):
@@ -66,14 +79,24 @@ class ApiTests(TestCase):
         response = self.client.get("/api/collections/1/contexts")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.contexts_payload, response.json())
+<<<<<<< HEAD
+
+    @heavy_test
+=======
     
     def test_lol(self):
         self.assertFalse(True)
 
+>>>>>>> master
     def test_post_contexts(self):
         words = self.client.get("/api/collections/1/words").json()
         contexts_payload = []
         for word in words:
              contexts_payload.append(word["id"])
         response = self.client.post("/api/collections/1/contexts", data=json.dumps(contexts_payload), content_type="application/json")
+<<<<<<< HEAD
+        print("ASD")
         self.assertEqual(response.status_code, 201)
+=======
+        self.assertEqual(response.status_code, 201)
+>>>>>>> master

@@ -8,13 +8,12 @@ ENV PYTHONUNBUFFERED=1
 RUN mkdir /app
 WORKDIR /app
 COPY . /app/
+RUN chmod +x /app/entrypoint.sh
 
 RUN pip install --upgrade pip 
 RUN pip install --no-cache-dir -r requirements.txt
 
 RUN mkdir -p /var/cache/ankizator-ai && chmod 770 /var/cache/ankizator-ai
-
-RUN apk update && apk add netcat-openbsd
 
 RUN chmod +x /app/entrypoint.sh
 ENTRYPOINT ["/app/entrypoint.sh"]

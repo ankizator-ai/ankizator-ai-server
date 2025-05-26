@@ -1,4 +1,4 @@
-from django.test import TestCase
+import json
 
 from django.test import TestCase, Client
 from api.models import Word, Context, Collection
@@ -81,5 +81,4 @@ class ApiTests(TestCase):
         for word in words:
              contexts_payload.append(word["id"])
         response = self.client.post("/api/collections/1/contexts", data=json.dumps(contexts_payload), content_type="application/json")
-        print("ASD")
         self.assertEqual(response.status_code, 201)

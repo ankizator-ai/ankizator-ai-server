@@ -2,11 +2,18 @@ import json
 
 from django.test import TestCase, Client
 from api.models import Word, Context, Collection
+from decouple import config
+import json
 
 def delete_ids(list_to_process):
     for piece in list_to_process:
         del piece['id']
 
+def heavy_test(func):
+    def wrapper(*args, **kwargs):
+        if config("RUN_HEAVY_TESTS", default=False, cast=bool):
+            func(*args, **kwargs)
+    return wrapper
 
 class ApiTests(TestCase):
     def setUp(self):
@@ -66,10 +73,8 @@ class ApiTests(TestCase):
         response = self.client.get("/api/collections/1/contexts")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.contexts_payload, response.json())
-    
-    def test_lol(self):
-        self.assertFalse(True)
 
+    @heavy_test
     def test_post_contexts(self):
         words = self.client.get("/api/collections/1/words").json()
         contexts_payload = []
